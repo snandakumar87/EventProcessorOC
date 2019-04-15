@@ -1,0 +1,30 @@
+spec:
+  template:
+    spec:            
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: data
+      - name: config
+        configMap:
+          name: maven-settings
+          items:
+          - key: settings.xml
+            path: settings.xml
+      containers:
+        - name: kstreamsapp
+          env:
+          - name: JAVA_OPTIONS
+            value: "-Dorg.kie.server.repo=/data -Dorg.jbpm.document.storage=/data/docs -Dspring.profiles.active=openshift"
+          - name: KIE_MAVEN_REPO_USER
+            value: mavenUser
+          - name: KIE_MAVEN_REPO_PASSWORD
+            value: SKQDse3!
+          - name: KIE_MAVEN_REPO
+            value: rhdm7-install-rhdmcentr/maven2
+          volumeMounts:
+          - mountPath: /data
+            name: data  
+          - mountPath: /opt/jboss/.m2
+            name: config
+               
